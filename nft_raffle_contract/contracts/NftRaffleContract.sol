@@ -2,6 +2,7 @@
 pragma solidity ^0.8.9;
 
 import "@thirdweb-dev/contracts/base/ERC721Base.sol";
+import "hardhat/console.sol";
 
 contract NFTRaffleContract {
     address public owner;
@@ -154,12 +155,12 @@ contract NFTRaffleContract {
         }
     }
 
-    function random() private view returns (uint256) {
+    function random() public view returns (uint256) {
         return
             uint256(
                 keccak256(
                     abi.encodePacked(
-                        block.prevrandao,
+                        blockhash(block.number - 1),
                         block.timestamp,
                         playersSelector
                     )
