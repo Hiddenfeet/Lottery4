@@ -1,4 +1,11 @@
-import { Card, CardBody, CardHeader, Divider, Input } from '@nextui-org/react'
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  Divider,
+  Input,
+  CardFooter,
+} from '@nextui-org/react'
 import useRaffleContract from '../hooks/useRaffleContract'
 import { useState } from 'react'
 import RaffleStatus from './RaffleStatus'
@@ -24,53 +31,53 @@ const AdminRaffleStatus = () => {
       <Divider />
       <CardBody className='gap-6'>
         <RaffleStatus />
-
-        {!raffleStatus.isRaffleOpen ? (
-          <div className='grid grid-cols-1 gap-3'>
-            <Input
-              label='Prize Contract Address'
-              labelPlacement='outside'
-              value={nftContractAddress}
-              onValueChange={(value) => setNftContractAddress(value)}
-              placeholder='0x...'
-              type='text'
-            />
-            <Input
-              label='Token ID'
-              labelPlacement='outside'
-              value={tokenId.toString()}
-              onValueChange={(value) => setTokenId(value)}
-              placeholder='0'
-            />
-
-            <Web3Button
-              theme='dark'
-              isDisabled={!contract || !nftContractAddress}
-              contractAddress={RAFFLE_CONTRACT_ADDRESS}
-              action={(contract) => {
-                contract.call('startRaffle', [
-                  nftContractAddress,
-                  parseInt(tokenId),
-                ])
-              }}
-              onSuccess={resetStates}
-            >
-              Start Raffle
-            </Web3Button>
-          </div>
-        ) : (
-          <div>
-            <Web3Button
-              style={{ width: '100%' }}
-              theme='dark'
-              contractAddress={RAFFLE_CONTRACT_ADDRESS}
-              action={(contract) => contract.call('endRaffle')}
-            >
-              End Raffle
-            </Web3Button>
-          </div>
-        )}
+        <div className='grid grid-cols-1 gap-3 '>
+          <Input
+            label='Prize Contract Address'
+            labelPlacement='outside'
+            value={nftContractAddress}
+            onValueChange={(value) => setNftContractAddress(value)}
+            placeholder='0x...'
+            type='text'
+          />
+          <Input
+            label='Token ID'
+            labelPlacement='outside'
+            value={tokenId.toString()}
+            onValueChange={(value) => setTokenId(value)}
+            placeholder='0'
+          />
+        </div>
       </CardBody>
+
+      <CardFooter>
+        {!raffleStatus.isRaffleOpen ? (
+          <Web3Button
+            theme='dark'
+            style={{ width: '100%' }}
+            isDisabled={!contract || !nftContractAddress}
+            contractAddress={RAFFLE_CONTRACT_ADDRESS}
+            action={(contract) => {
+              contract.call('startRaffle', [
+                nftContractAddress,
+                parseInt(tokenId),
+              ])
+            }}
+            onSuccess={resetStates}
+          >
+            Start Raffle
+          </Web3Button>
+        ) : (
+          <Web3Button
+            style={{ width: '100%' }}
+            theme='dark'
+            contractAddress={RAFFLE_CONTRACT_ADDRESS}
+            action={(contract) => contract.call('endRaffle')}
+          >
+            End Raffle
+          </Web3Button>
+        )}
+      </CardFooter>
     </Card>
   )
 }

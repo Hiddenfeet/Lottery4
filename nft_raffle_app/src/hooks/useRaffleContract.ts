@@ -42,15 +42,15 @@ const useRaffleContract = () => {
     isLoading: isLoadingPrizeNFTContractMetadata,
   } = useContractMetadata(prizeNFTContract)
 
-  console.log('prizeNFTContractMetadata', prizeNFTContractMetadata)
-
   const { data: nft, isLoading: isLoadingNFT } = useNFT(
     prizeNFTContract,
     prizeNFTTokenId,
   )
-  console.log(nft)
 
   // End Contract data for prize NFT  ///
+
+  const { data: contractBalance, isLoading: isLoadingContractBalance } =
+    useContractRead(contract, 'contractBalance')
 
   const returnValues = {
     raffleStatus: {
@@ -73,6 +73,11 @@ const useRaffleContract = () => {
       prizeNFT: nft,
       prizeNFTContractMetadata,
     },
+
+    contractBalance: contractBalance
+      ? ethers.utils.formatEther(contractBalance)
+      : ('0' as string),
+    isLoadingContractBalance,
     contract,
   }
 
