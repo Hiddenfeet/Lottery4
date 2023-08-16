@@ -7,7 +7,7 @@ const CurrentEntries = () => {
   return (
     <div className='flex flex-col gap-3'>
       <Skeleton isLoaded={!isLoadingCurrentEntries}>
-        {currentEntries.map((entry: string) => (
+        {currentEntries?.map((entry: string) => (
           <EntryCard key={entry} walletAddress={entry} />
         ))}
       </Skeleton>
