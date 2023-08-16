@@ -14,7 +14,7 @@ import { ethers } from 'ethers'
 import AdminWithDrawBalance from './AdminWithDrawBalance'
 
 const AdminEntryCost = () => {
-  const { entryCostInEther } = useRaffleContract()
+  const { entryCostInEther, raffleStatus } = useRaffleContract()
   const [entryCostValue, setEntryCostValue] = useState('0')
   const resetEntryCost = () => setEntryCostValue('0')
 
@@ -47,6 +47,7 @@ const AdminEntryCost = () => {
           <Web3Button
             theme='dark'
             style={{ width: '100%' }}
+            isDisabled={!raffleStatus}
             contractAddress={RAFFLE_CONTRACT_ADDRESS}
             action={(contract) => {
               contract.call('changeEntryCost', [

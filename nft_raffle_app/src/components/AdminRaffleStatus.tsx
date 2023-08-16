@@ -13,7 +13,7 @@ import { Web3Button } from '@thirdweb-dev/react'
 import { RAFFLE_CONTRACT_ADDRESS } from '../constants'
 
 const AdminRaffleStatus = () => {
-  const { raffleStatus, contract } = useRaffleContract()
+  const { raffleStatus, raffleContract } = useRaffleContract()
 
   const [nftContractAddress, setNftContractAddress] = useState('')
   const [tokenId, setTokenId] = useState('0')
@@ -51,11 +51,11 @@ const AdminRaffleStatus = () => {
       </CardBody>
 
       <CardFooter>
-        {!raffleStatus.isRaffleOpen ? (
+        {!raffleStatus ? (
           <Web3Button
             theme='dark'
             style={{ width: '100%' }}
-            isDisabled={!contract || !nftContractAddress}
+            isDisabled={!raffleContract || !nftContractAddress}
             contractAddress={RAFFLE_CONTRACT_ADDRESS}
             action={(contract) => {
               contract.call('startRaffle', [

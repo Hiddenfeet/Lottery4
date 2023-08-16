@@ -1,4 +1,5 @@
 import {
+  useAddress,
   useContract,
   useContractMetadata,
   useContractRead,
@@ -8,41 +9,48 @@ import { RAFFLE_CONTRACT_ADDRESS } from '../constants'
 import { ethers } from 'ethers'
 
 const useRaffleContract = () => {
-  const { contract } = useContract(RAFFLE_CONTRACT_ADDRESS)
+  const address = useAddress()
+  const { contract: raffleContract } = useContract(RAFFLE_CONTRACT_ADDRESS)
 
   // Raffle Status
   const { data: raffleStatus, isLoading: isLoadingRaffleStatus } =
-    useContractRead(contract, 'raffleStatus')
+    useContractRead(raffleContract, 'raffleStatus')
 
   // Raffle entry cost
   const { data: entryCost, isLoading: isLoadingEntryCost } = useContractRead(
-    contract,
+    raffleContract,
     'entryCost',
   )
 
   // Prize nft contract address
   const { data: prizeNFTContractAddress } = useContractRead(
-    contract,
+    raffleContract,
     'nftAddress',
   )
 
   // Prize nft token id
-  const { data: prizeNFTTokenId } = useContractRead(contract, 'nftId')
+  const { data: prizeNFTTokenId } = useContractRead(raffleContract, 'nftId')
 
   // Total entries
   const { data: totalEntries, isLoading: isLoadingTotalEntries } =
-    useContractRead(contract, 'totalEntries')
+    useContractRead(raffleContract, 'totalEntries')
 
   // Contract data for prize NFT  //
 
-  const { contract: prizeNFTContract } = useContract(prizeNFTContractAddress)
+  const { contract: prizeNFTContract } = useContract(
+    prizeNFTContractAddress,
+    'nft-drop',
+  )
+
+  const { data: currentEntries, isLoading: isLoadingCurrentEntries } =
+    useContractRead(raffleContract, 'getPlayers')
 
   const {
     data: prizeNFTContractMetadata,
     isLoading: isLoadingPrizeNFTContractMetadata,
   } = useContractMetadata(prizeNFTContract)
 
-  const { data: nft, isLoading: isLoadingNFT } = useNFT(
+  const { data: prizeNFT, isLoading: isLoadingPrizeNFT } = useNFT(
     prizeNFTContract,
     prizeNFTTokenId,
   )
@@ -50,13 +58,14 @@ const useRaffleContract = () => {
   // End Contract data for prize NFT  ///
 
   const { data: contractBalance, isLoading: isLoadingContractBalance } =
-    useContractRead(contract, 'contractBalance')
+    useContractRead(raffleContract, 'contractBalance')
+
+  const { data: numberOfEntries, isLoading: isLoadingNumberOfEntries } =
+    useContractRead(raffleContract, 'entryCount', [address])
 
   const returnValues = {
-    raffleStatus: {
-      isRaffleOpen: raffleStatus as boolean,
-      isLoading: isLoadingRaffleStatus as boolean,
-    },
+    raffleStatus,
+    isLoadingRaffleStatus,
 
     entryCostInEther: {
       data: entryCost ? ethers.utils.formatEther(entryCost) : '0',
@@ -67,18 +76,27 @@ const useRaffleContract = () => {
       data: totalEntries ? totalEntries.toString() : '0',
       isLoading: isLoadingTotalEntries as boolean,
     },
+
     currentRaffleNFT: {
       isLoadingPrizeNFTContractMetadata,
-      isLoadingNFT,
-      prizeNFT: nft,
+      isLoadingPrizeNFT,
+      prizeNFT,
       prizeNFTContractMetadata,
     },
 
     contractBalance: contractBalance
       ? ethers.utils.formatEther(contractBalance)
       : ('0' as string),
+
     isLoadingContractBalance,
-    contract,
+    prizeNFTTokenId,
+    prizeNFTContractAddress,
+    prizeNFTContract,
+    raffleContract,
+    currentEntries,
+    isLoadingCurrentEntries,
+    numberOfEntries,
+    isLoadingNumberOfEntries,
   }
 
   return returnValues

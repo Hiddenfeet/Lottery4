@@ -18,7 +18,7 @@ const EntryAmountButton = ({
 
 const EntryAmount = () => {
   const [entryAmount, setEntryAmount] = useState(0)
-  const { entryCostInEther, raffleStatus, contract } = useRaffleContract()
+  const { entryCostInEther, raffleStatus, raffleContract } = useRaffleContract()
 
   const entryCostOnSubmit = parseFloat(entryCostInEther.data) * entryAmount
 
@@ -32,8 +32,8 @@ const EntryAmount = () => {
   }
 
   const onBuyEntries = () => {
-    if (contract) {
-      contract.call('buyEntry', [entryAmount], {
+    if (raffleContract) {
+      raffleContract.call('buyEntry', [entryAmount], {
         value: ethers.utils.parseEther(entryCostOnSubmit.toString()),
       })
     }
@@ -62,7 +62,7 @@ const EntryAmount = () => {
 
       <Button
         className='rounded-xl w-[50%]'
-        isDisabled={!raffleStatus.isRaffleOpen}
+        isDisabled={!raffleStatus}
         onClick={onBuyEntries}
       >
         Buy Entries
