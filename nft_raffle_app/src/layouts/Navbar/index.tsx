@@ -2,9 +2,9 @@ import {
   NavbarBrand,
   NavbarContent,
   NavbarItem,
-  Link,
   Navbar as BaseNavbar,
 } from '@nextui-org/react'
+import { NavLink } from 'react-router-dom'
 import {
   ConnectWallet,
   useAddress,
@@ -29,18 +29,29 @@ const Navbar = () => {
       className='text-white bg-teal-700 min-h-fit py-2'
     >
       <NavbarBrand>
-        <h1 className='text-2xl'>NFT Raffle</h1>
+        <NavLink
+          to='/'
+          className='text-xl text-white hover:scale-125 transition-all'
+        >
+          NFT Raffle
+        </NavLink>
       </NavbarBrand>
-      <NavbarContent className='sm:flex gap-4' justify='center'>
+
+      <NavbarContent justify='end'>
         <NavbarItem>
           {!isLoadingOwner && owner === address && (
-            <Link className='text-xl text-white' href='admin'>
+            <NavLink
+              to='/admin'
+              className={({ isActive }: { isActive: boolean }) =>
+                `text-white ${
+                  isActive ? 'border-b-2 border-white' : 'border-none'
+                }`
+              }
+            >
               Admin
-            </Link>
+            </NavLink>
           )}
         </NavbarItem>
-      </NavbarContent>
-      <NavbarContent justify='end'>
         <NavbarItem>
           <ConnectWallet theme='light' />
         </NavbarItem>

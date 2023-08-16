@@ -1,15 +1,15 @@
 import { MediaRenderer, useAddress } from '@thirdweb-dev/react'
 import { Skeleton } from '@nextui-org/react'
 import useRaffleStatus from '../../hooks/useRaffleContract'
-import RaffleStatus from '../../components/RaffleStatus'
-import EntryAmount from '../../components/EntryAmount'
 import {
   controllersContent,
   controllersHeader,
   raffleControllers,
 } from './styles'
+import RaffleStatus from '../../components/RaffleStatus'
+import EntryAmount from '../../components/EntryAmount'
 
-const AppContent = () => {
+const Landing = () => {
   const { entryCostInEther, totalEntries } = useRaffleStatus()
   const address = useAddress()
 
@@ -67,4 +67,4 @@ const AppContent = () => {
   )
 }
 
-export default AppContent
+export default Landing
