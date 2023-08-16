@@ -13,11 +13,13 @@ const Root = () => {
   return (
     <>
       <Navbar />
-      <Routes>
-        <Route path='/' element={<Landing />} />
-        <Route path='/admin' element={<AdminPage />} />
-        <Route path='*' element={<NotFound />} />
-      </Routes>
+      <main>
+        <Routes>
+          <Route path='/admin' element={<AdminPage />} />
+          <Route path='/' element={<Landing />} />
+          <Route path='/*' element={<NotFound />} />
+        </Routes>
+      </main>
     </>
   )
 }
@@ -33,7 +35,7 @@ const App = () => {
           element: <AdminPage />,
         },
         {
-          path: '*',
+          path: '/*',
           element: <NotFound />,
         },
       ],

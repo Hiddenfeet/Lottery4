@@ -35,7 +35,7 @@ contract NFTRaffleContract {
         _;
     }
 
-    function StartRaffle(
+    function startRaffle(
         address _nftContract,
         uint256 _tokenID
     ) public onlyOwner {

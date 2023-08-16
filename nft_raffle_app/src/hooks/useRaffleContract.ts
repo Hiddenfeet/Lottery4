@@ -1,6 +1,11 @@
-import { useContract, useContractRead } from '@thirdweb-dev/react'
+import {
+  useContract,
+  useContractMetadata,
+  useContractRead,
+  useNFT,
+} from '@thirdweb-dev/react'
 import { RAFFLE_CONTRACT_ADDRESS } from '../constants'
-import { BigNumber, ethers } from 'ethers'
+import { ethers } from 'ethers'
 
 const useRaffleContract = () => {
   const { contract } = useContract(RAFFLE_CONTRACT_ADDRESS)
@@ -15,8 +20,37 @@ const useRaffleContract = () => {
     'entryCost',
   )
 
+  // Prize nft contract address
+  const { data: prizeNFTContractAddress } = useContractRead(
+    contract,
+    'nftAddress',
+  )
+
+  // Prize nft token id
+  const { data: prizeNFTTokenId } = useContractRead(contract, 'nftId')
+
+  // Total entries
   const { data: totalEntries, isLoading: isLoadingTotalEntries } =
     useContractRead(contract, 'totalEntries')
+
+  // Contract data for prize NFT  //
+
+  const { contract: prizeNFTContract } = useContract(prizeNFTContractAddress)
+
+  const {
+    data: prizeNFTContractMetadata,
+    isLoading: isLoadingPrizeNFTContractMetadata,
+  } = useContractMetadata(prizeNFTContract)
+
+  console.log('prizeNFTContractMetadata', prizeNFTContractMetadata)
+
+  const { data: nft, isLoading: isLoadingNFT } = useNFT(
+    prizeNFTContract,
+    prizeNFTTokenId,
+  )
+  console.log(nft)
+
+  // End Contract data for prize NFT  ///
 
   const returnValues = {
     raffleStatus: {
@@ -32,6 +66,12 @@ const useRaffleContract = () => {
     totalEntries: {
       data: totalEntries ? totalEntries.toString() : '0',
       isLoading: isLoadingTotalEntries as boolean,
+    },
+    currentRaffleNFT: {
+      isLoadingPrizeNFTContractMetadata,
+      isLoadingNFT,
+      prizeNFT: nft,
+      prizeNFTContractMetadata,
     },
     contract,
   }

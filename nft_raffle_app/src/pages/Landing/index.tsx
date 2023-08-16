@@ -8,20 +8,17 @@ import {
 } from './styles'
 import RaffleStatus from '../../components/RaffleStatus'
 import EntryAmount from '../../components/EntryAmount'
+import PrizeNft from '../../components/PrizeNft'
 
 const Landing = () => {
-  const { entryCostInEther, totalEntries } = useRaffleStatus()
+  const { entryCostInEther, totalEntries, raffleStatus } = useRaffleStatus()
   const address = useAddress()
 
+  console.log(raffleStatus)
+
   return (
-    <main>
-      <div className='max-w-screen-2xl grid grid-cols-2 gap-6 px-6 w-full'>
-        <MediaRenderer
-          width='100%'
-          height='100%'
-          className='border shadow-xl rounded-2xl'
-          src='ipfs://QmS1gz2fNL6DfnfebNsY3KkdYh3vT4jcEArkndao6eCk5Z/Untitled%20design%20(14).png'
-        />
+    <section>
+      <div className='max-w-screen-2xl place-items-center grid grid-cols-1 lg:grid-cols-2 gap-6 w-full'>
         <div className={raffleControllers}>
           <div className={controllersHeader}>
             <span className='text-4xl font-bold'>
@@ -62,8 +59,18 @@ const Landing = () => {
             </Skeleton>
           </div>
         </div>
+        {raffleStatus.isRaffleOpen ? (
+          <PrizeNft />
+        ) : (
+          <MediaRenderer
+            width='100%'
+            height='100%'
+            className='border shadow-xl rounded-2xl'
+            src='ipfs://QmS1gz2fNL6DfnfebNsY3KkdYh3vT4jcEArkndao6eCk5Z/Untitled%20design%20(14).png'
+          />
+        )}
       </div>
-    </main>
+    </section>
   )
 }
 
