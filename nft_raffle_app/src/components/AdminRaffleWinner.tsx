@@ -5,6 +5,8 @@ import AdminTransferNFT from './AdminTransferNFT'
 const AdminRaffleWinner = () => {
   const { prizeNFTContractAddress } = useRaffleContract()
 
+  const nullAddress = '0x0000000000000000000000000000000000000000'
+
   return (
     <Card fullWidth>
       <CardHeader>
@@ -12,12 +14,13 @@ const AdminRaffleWinner = () => {
       </CardHeader>
       <Divider />
       <CardBody className='gap-6'>
-        <div className='grid grid-cols-1 gap-3 '>
-          {prizeNFTContractAddress ===
-          '0x0000000000000000000000000000000000000000' ? (
+        <div className='flex flex-col h-full gap-3 justify-start'>
+          {prizeNFTContractAddress === nullAddress ? (
             <>
-              <h3 className='text-xl font-semibold'>No prize NFT set</h3>
-              <p className='text-lg font-semibold'>
+              <h3 className='text-xl text-red-500 p-2 bg-red-200 rounded-lg'>
+                No prize NFT set
+              </h3>
+              <p className='text-lg'>
                 Please start a new raffle and select the NFT that will be
                 raffled off.
               </p>

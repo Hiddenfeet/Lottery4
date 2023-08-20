@@ -1,11 +1,4 @@
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  Divider,
-  Input,
-  CardFooter,
-} from '@nextui-org/react'
+import { Card, CardBody, CardHeader, Divider, Input } from '@nextui-org/react'
 import useRaffleContract from '../hooks/useRaffleContract'
 import { useState } from 'react'
 import RaffleStatus from './RaffleStatus'
@@ -29,9 +22,9 @@ const AdminRaffleStatus = () => {
         <h2 className='text-2xl font-semibold'>Status</h2>
       </CardHeader>
       <Divider />
-      <CardBody className='gap-6'>
+      <CardBody className='flex flex-col  justify-between gap-4'>
         <RaffleStatus />
-        <div className='grid grid-cols-1 gap-3 '>
+        <div className='grid grid-cols-1 gap-4'>
           <Input
             label='Prize Contract Address'
             labelPlacement='outside'
@@ -48,10 +41,7 @@ const AdminRaffleStatus = () => {
             placeholder='0'
           />
         </div>
-      </CardBody>
-
-      <CardFooter>
-        {!raffleStatus ? (
+        {!raffleStatus.data ? (
           <Web3Button
             theme='dark'
             style={{ width: '100%' }}
@@ -77,7 +67,7 @@ const AdminRaffleStatus = () => {
             End Raffle
           </Web3Button>
         )}
-      </CardFooter>
+      </CardBody>
     </Card>
   )
 }

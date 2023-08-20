@@ -3,6 +3,8 @@ import useRaffleContract from '../hooks/useRaffleContract'
 import { Button, Input } from '@nextui-org/react'
 import { AiOutlinePlus, AiOutlineMinus } from 'react-icons/ai'
 import { ethers } from 'ethers'
+import { Web3Button, useAddress } from '@thirdweb-dev/react'
+import { RAFFLE_CONTRACT_ADDRESS } from '../constants'
 
 const EntryAmountButton = ({
   children,
@@ -17,10 +19,12 @@ const EntryAmountButton = ({
 )
 
 const EntryAmount = () => {
+  const address = useAddress()
   const [entryAmount, setEntryAmount] = useState(0)
-  const { entryCostInEther, raffleStatus, raffleContract } = useRaffleContract()
+  const { entryCost, raffleStatus } = useRaffleContract()
 
-  const entryCostOnSubmit = parseFloat(entryCostInEther.data) * entryAmount
+  const entryCostOnSubmit =
+    parseFloat(ethers.utils.formatEther(entryCost.data || '0')) * entryAmount
 
   const increaseEntryAmount = () => {
     setEntryAmount(isNaN(entryAmount) ? 1 : entryAmount + 1)
@@ -31,15 +35,9 @@ const EntryAmount = () => {
     }
   }
 
-  const onBuyEntries = () => {
-    if (raffleContract) {
-      raffleContract.call('buyEntry', [entryAmount], {
-        value: ethers.utils.parseEther(entryCostOnSubmit.toString()),
-      })
-    }
+  if (!address) {
+    return <p> Connect your wallet to buy entries!</p>
   }
-
-  console.log(entryAmount)
 
   return (
     <div className='flex items-center gap-10 justify-between w-full'>
@@ -60,13 +58,18 @@ const EntryAmount = () => {
         </EntryAmountButton>
       </div>
 
-      <Button
+      <Web3Button
         className='rounded-xl w-[50%]'
-        isDisabled={!raffleStatus}
-        onClick={onBuyEntries}
+        isDisabled={!raffleStatus.data}
+        contractAddress={RAFFLE_CONTRACT_ADDRESS}
+        action={(contract) => {
+          return contract.call('buyEntry', [entryAmount], {
+            value: ethers.utils.parseEther(entryCostOnSubmit.toString() || '0'),
+          })
+        }}
       >
         Buy Entries
-      </Button>
+      </Web3Button>
     </div>
   )
 }

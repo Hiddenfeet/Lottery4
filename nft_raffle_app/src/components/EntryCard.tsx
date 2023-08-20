@@ -1,18 +1,19 @@
 import { Card, Skeleton } from '@nextui-org/react'
 import useRaffleContract from '../hooks/useRaffleContract'
+import { useContractRead } from '@thirdweb-dev/react'
 
 const EntryCard = ({ walletAddress }: { walletAddress: string }) => {
-  const { numberOfEntries, isLoadingNumberOfEntries } = useRaffleContract()
-
-  const truncateAddress = (address: string) => {
-    return address.slice(0, 6) + '...' + address.slice(-4)
-  }
+  const { raffleContract } = useRaffleContract()
+  const { data: numberOfEntries, isLoading: isLoadingNumberOfEntries } =
+    useContractRead(raffleContract, 'entryCount', [walletAddress])
 
   return (
-    <Card fullWidth>
+    <Card fullWidth className='px-3 py-2'>
       <Skeleton isLoaded={!isLoadingNumberOfEntries}>
-        <span>{truncateAddress(walletAddress)}</span>
-        <span>Entries: {numberOfEntries.toNumber()}</span>
+        <div className='flex flex-col gap-1'>
+          <span>Address: {walletAddress}</span>
+          <span>Entries: {numberOfEntries?.toNumber()}</span>
+        </div>
       </Skeleton>
     </Card>
   )

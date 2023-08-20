@@ -26,7 +26,7 @@ const Navbar = () => {
     <BaseNavbar
       position='static'
       maxWidth='2xl'
-      className='text-white bg-teal-700 min-h-fit py-2'
+      className='text-white bg-cyan-700 min-h-fit py-2'
     >
       <NavbarBrand>
         <NavLink

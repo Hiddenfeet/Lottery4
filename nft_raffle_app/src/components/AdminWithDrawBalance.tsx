@@ -2,18 +2,19 @@ import { Skeleton } from '@nextui-org/react'
 import useRaffleContract from '../hooks/useRaffleContract'
 import { Web3Button } from '@thirdweb-dev/react'
 import { RAFFLE_CONTRACT_ADDRESS } from '../constants'
+import { ethers } from 'ethers'
 
 const AdminWithDrawBalance = () => {
-  const { contractBalance, isLoadingContractBalance } = useRaffleContract()
+  const { contractBalance } = useRaffleContract()
   return (
     <div className='flex flex-col gap-3'>
       <Skeleton
         as='p'
         className='rounded-xl'
-        isLoaded={!isLoadingContractBalance}
+        isLoaded={!contractBalance.isLoading}
       >
-        <span className='font-bold'>Contract Balance:</span> {contractBalance}{' '}
-        MATIC
+        <span className='font-bold'>Contract Balance:</span>
+        {ethers.utils.formatEther(contractBalance.data || '0')} MATIC
       </Skeleton>
 
       <Web3Button

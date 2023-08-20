@@ -1,23 +1,21 @@
-import { useAddress } from '@thirdweb-dev/react'
-import { Skeleton } from '@nextui-org/react'
+import { Chip, Skeleton } from '@nextui-org/react'
 import useRaffleStatus from '../../hooks/useRaffleContract'
 import RaffleStatus from '../../components/RaffleStatus'
 import EntryAmount from '../../components/EntryAmount'
 import PrizeNft from '../../components/PrizeNft'
 
-import RaffleImg from '../../assets/raffle.png'
 import CurrentEntries from '../../components/CurrentEntries'
+import { ethers } from 'ethers'
 
 const Landing = () => {
-  const { entryCostInEther, totalEntries, raffleStatus } = useRaffleStatus()
-  const address = useAddress()
+  const { totalEntries, entryCost } = useRaffleStatus()
 
   return (
-    <section className='max-w-screen-2xl grid grid-cols-1 gap-10'>
-      <div className=' place-items-center grid grid-cols-1 lg:grid-cols-2 gap-6 w-full'>
+    <section className='max-w-screen-2xl grid grid-cols-1 gap-20'>
+      <div className='place-items-start grid grid-cols-1 lg:grid-cols-2 gap-6'>
         <div
-          className={`
-        flex shadow-2xl flex-col justify-between rounded-xl p-6 bg-teal-500 w-full gap-4 text-white`}
+          className={`flex shadow-2xl flex-col justify-between rounded-xl
+          p-6 bg-cyan-700 w-full gap-4 text-white`}
         >
           <div className='flex flex-col gap-6'>
             <span className='text-4xl font-bold'>
@@ -30,47 +28,43 @@ const Landing = () => {
             </span>
           </div>
 
-          <div className={`flex flex-col gap-5 rounded-xl p-6 bg-teal-600`}>
+          <div className='flex flex-col gap-5 rounded-xl p-6 bg-cyan-600'>
             <RaffleStatus />
 
-            <Skeleton
-              isLoaded={!entryCostInEther.isLoading}
-              className='rounded-xl text-xl font-bold'
-              as='span'
-            >
-              Entry cost is: {entryCostInEther.data} MATIC
-            </Skeleton>
+            <div className='flex flex-col gap-2'>
+              <Skeleton
+                isLoaded={!entryCost.isLoading}
+                className='rounded-xl text-xl'
+                as='span'
+              >
+                Cost per ticket is:{' '}
+                <Chip className='bg-white'>
+                  {ethers.utils.formatEther(entryCost.data || '0')} MATIC
+                </Chip>
+              </Skeleton>
 
-            {address ? (
-              <EntryAmount />
-            ) : (
-              <p className='text-center text-lg'>
-                Connect your wallet to buy entries!
-              </p>
-            )}
+              <Skeleton
+                isLoaded={!totalEntries.isLoading}
+                className='rounded-xl text-xl'
+                as='span'
+              >
+                Total entries:{' '}
+                <Chip className='bg-white'>
+                  {totalEntries.data.toString() || '0'}
+                </Chip>
+              </Skeleton>
+            </div>
 
-            <Skeleton
-              isLoaded={!totalEntries.isLoading}
-              className='rounded-xl text-xl font-bold'
-              as='span'
-            >
-              Total entries: {totalEntries.data} MATIC
-            </Skeleton>
+            <EntryAmount />
           </div>
         </div>
-        {raffleStatus ? (
-          <PrizeNft />
-        ) : (
-          <img
-            className='bg-cover shadow-lg rounded-xl bg-center'
-            src={RaffleImg}
-            alt=''
-          />
-        )}
+
+        <PrizeNft />
       </div>
 
-      <div className='h-10'>
+      <div className='bg-cyan-700 flex flex-col gap-2 p-6 rounded-xl text-white'>
         <h4 className='text-xl'>Current Raffle Entries:</h4>
+        <div className='border-b w-full' />
         <CurrentEntries />
       </div>
     </section>

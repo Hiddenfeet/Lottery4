@@ -3,13 +3,20 @@ import useRaffleContract from '../hooks/useRaffleContract'
 import EntryCard from './EntryCard'
 
 const CurrentEntries = () => {
-  const { currentEntries, isLoadingCurrentEntries } = useRaffleContract()
+  const { currentEntries } = useRaffleContract()
+
   return (
     <div className='flex flex-col gap-3'>
-      <Skeleton isLoaded={!isLoadingCurrentEntries}>
-        {currentEntries?.map((entry: string) => (
-          <EntryCard key={entry} walletAddress={entry} />
-        ))}
+      <Skeleton className='rounded-xl' isLoaded={!currentEntries.isLoading}>
+        <div className='flex flex-col gap-3'>
+          {currentEntries?.data?.length ? (
+            currentEntries?.data?.map((entry: string) => (
+              <EntryCard key={entry} walletAddress={entry} />
+            ))
+          ) : (
+            <p className='text-center text-xl'>No entries yet!</p>
+          )}
+        </div>
       </Skeleton>
     </div>
   )

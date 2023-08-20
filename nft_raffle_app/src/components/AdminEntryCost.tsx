@@ -14,7 +14,8 @@ import { ethers } from 'ethers'
 import AdminWithDrawBalance from './AdminWithDrawBalance'
 
 const AdminEntryCost = () => {
-  const { entryCostInEther, raffleStatus } = useRaffleContract()
+  const { entryCost, raffleStatus } = useRaffleContract()
+
   const [entryCostValue, setEntryCostValue] = useState('0')
   const resetEntryCost = () => setEntryCostValue('0')
 
@@ -24,18 +25,22 @@ const AdminEntryCost = () => {
         <h2 className='text-2xl font-semibold'>Entry Cost</h2>
       </CardHeader>
       <Divider />
-      <CardBody className='gap-6 '>
-        <Skeleton isLoaded={!entryCostInEther.isLoading}>
+      <CardBody className='h-full gap-3 flex flex-col justify-between'>
+        <Skeleton isLoaded={!entryCost.isLoading}>
           <Card
             radius='lg'
             shadow='lg'
             fullWidth
             className='bg-primary-400 px-5 py-2 text-white text-lg'
           >
-            <p> Current entry cost: {entryCostInEther.data} MATIC</p>
+            <p>
+              {' '}
+              Current entry cost:{' '}
+              {ethers.utils.formatEther(entryCost.data || '0')} MATIC
+            </p>
           </Card>
         </Skeleton>
-        <div className='grid grid-cols-1 gap-3'>
+        <div className='flex flex-col gap-3'>
           <Input
             label='Update entry cost'
             labelPlacement='outside'
@@ -47,20 +52,20 @@ const AdminEntryCost = () => {
           <Web3Button
             theme='dark'
             style={{ width: '100%' }}
-            isDisabled={!raffleStatus}
+            isDisabled={raffleStatus.data}
+            onSuccess={resetEntryCost}
             contractAddress={RAFFLE_CONTRACT_ADDRESS}
             action={(contract) => {
               contract.call('changeEntryCost', [
-                ethers.utils.parseEther(entryCostValue),
+                ethers.utils.parseEther(entryCostValue || '0'),
               ])
             }}
-            onSuccess={resetEntryCost}
           >
             Update entry cost
           </Web3Button>
-          <Divider />
-          <AdminWithDrawBalance />
         </div>
+
+        <AdminWithDrawBalance />
       </CardBody>
     </Card>
   )
