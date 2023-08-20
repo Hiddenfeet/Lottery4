@@ -42,7 +42,7 @@ const Navbar = () => {
           {!isLoadingOwner && owner === address && (
             <NavLink
               to='/admin'
-              className={({ isActive }: { isActive: boolean }) =>
+              className={(isActive) =>
                 `text-white ${
                   isActive ? 'border-b-2 border-white' : 'border-none'
                 }`

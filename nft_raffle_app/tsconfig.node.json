@@ -4,6 +4,6 @@
     "module": "esnext",
     "moduleResolution": "node"
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts|tsx"],
   "exclude": ["node_modules"]
 }

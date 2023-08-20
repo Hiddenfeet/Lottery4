@@ -33,7 +33,7 @@ const Landing = () => {
 
             <div className='flex flex-col gap-2'>
               <Skeleton
-                isLoaded={!entryCost.isLoading}
+                isLoaded={!entryCost?.isLoading}
                 className='rounded-xl text-xl'
                 as='span'
               >
@@ -44,13 +44,13 @@ const Landing = () => {
               </Skeleton>
 
               <Skeleton
-                isLoaded={!totalEntries.isLoading}
+                isLoaded={!totalEntries?.isLoading}
                 className='rounded-xl text-xl'
                 as='span'
               >
                 Total entries:{' '}
                 <Chip className='bg-white'>
-                  {totalEntries.data.toString() || '0'}
+                  {totalEntries?.data?.toString() || '0'}
                 </Chip>
               </Skeleton>
             </div>

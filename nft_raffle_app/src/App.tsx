@@ -1,10 +1,5 @@
 import Navbar from './layouts/Navbar'
-import {
-  createBrowserRouter,
-  RouterProvider,
-  Route,
-  Routes,
-} from 'react-router-dom'
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import Landing from './pages/Landing'
 import AdminPage from './pages/Admin'
 import NotFound from './pages/notFound'
@@ -14,35 +9,22 @@ const Root = () => {
     <>
       <Navbar />
       <main>
-        <Routes>
-          <Route path='/admin' element={<AdminPage />} />
-          <Route path='/' element={<Landing />} />
-          <Route path='/*' element={<NotFound />} />
-        </Routes>
+        <Switch>
+          <Route path='/admin' component={AdminPage} />
+          <Route path='/' component={Landing} />
+          <Route path='/*' component={NotFound} />
+        </Switch>
       </main>
     </>
   )
 }
 
 const App = () => {
-  const router = createBrowserRouter([
-    {
-      path: '/',
-      element: <Root />,
-      children: [
-        {
-          path: '/admin',
-          element: <AdminPage />,
-        },
-        {
-          path: '/*',
-          element: <NotFound />,
-        },
-      ],
-    },
-  ])
-
-  return <RouterProvider router={router} />
+  return (
+    <BrowserRouter>
+      <Root />
+    </BrowserRouter>
+  )
 }
 
 export default App
