@@ -5,22 +5,12 @@ import {
   Navbar as BaseNavbar,
 } from '@nextui-org/react'
 import { NavLink } from 'react-router-dom'
-import {
-  ConnectWallet,
-  useAddress,
-  useContract,
-  useContractRead,
-} from '@thirdweb-dev/react'
-import { RAFFLE_CONTRACT_ADDRESS } from '../../constants'
+import { ConnectWallet, useAddress } from '@thirdweb-dev/react'
+import useRaffleContract from '../../hooks/useRaffleContract'
 
 const Navbar = () => {
   const address = useAddress()
-  const { contract } = useContract(RAFFLE_CONTRACT_ADDRESS)
-
-  const { data: owner, isLoading: isLoadingOwner } = useContractRead(
-    contract,
-    'owner',
-  )
+  const { owner } = useRaffleContract()
 
   return (
     <BaseNavbar
@@ -39,7 +29,7 @@ const Navbar = () => {
 
       <NavbarContent justify='end'>
         <NavbarItem>
-          {!isLoadingOwner && owner === address && (
+          {!owner.isLoading && owner?.data === address && (
             <NavLink
               to='/admin'
               className={(isActive) =>

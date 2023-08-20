@@ -8,11 +8,7 @@ const AdminWithDrawBalance = () => {
   const { contractBalance } = useRaffleContract()
   return (
     <div className='flex flex-col gap-3'>
-      <Skeleton
-        as='p'
-        className='rounded-xl'
-        isLoaded={!contractBalance.isLoading}
-      >
+      <Skeleton className='rounded-xl' isLoaded={!contractBalance.isLoading}>
         <span className='font-bold'>Contract Balance:</span>
         {ethers.utils.formatEther(contractBalance.data || '0')} MATIC
       </Skeleton>

@@ -33,8 +33,11 @@ const useRaffleContract = () => {
 
   const contractBalance = useContractRead(raffleContract, 'getBalance')
 
+  const owner = useContractRead(raffleContract, 'owner')
+
   const returnValues = {
     raffleStatus,
+    owner,
     entryCost,
     totalEntries,
     currentEntries,
